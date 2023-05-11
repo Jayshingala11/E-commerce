@@ -88,6 +88,7 @@ class UserControler {
         }
     }
 
+
     async profile(req,res) {
         let connection = await databaseHelper.getConnection();
         let body = req.body;
@@ -208,6 +209,26 @@ class UserControler {
         }
         finally {
             databaseHelper.release(connection);
+        }
+    }
+
+
+
+    async otp(req, res) {
+        let body = req.body;
+        try {
+            console.log(`[body is] :::`, body);
+
+            await userValidator.otp(body);
+
+            let otpGenerate = await authHelper.otpGenerator();
+            console.log(`[OTP is] :::`, otpGenerate);
+
+            
+        }
+        catch(err) {
+            console.log(`In otp catch`, err);
+            sendResponse(res, 0, "Somthing went wrong");
         }
     }
 }

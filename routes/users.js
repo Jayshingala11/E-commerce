@@ -28,5 +28,6 @@ router.post('/productFetch', userControler.productFetch);
 
 router.get('/getCart', userControler.getCart);
 
+router.post('/otp', userControler.otp);
 
 module.exports = router;

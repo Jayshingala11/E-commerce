@@ -66,11 +66,29 @@ class userValidator {
     }
 
 
-    async getCart(body) {
-        return new Promise((resolve, reject) => {
-            const schema = Joi.object({
+    // async getCart(body) {
+    //     return new Promise((resolve, reject) => {
+    //         const schema = Joi.object({
                 
+    //         })
+    //     })
+    // }
+
+
+    async otp(body) {
+        return new Promise(async(resolve, reject) => {
+            const schema = Joi.object({
+                number: Joi.string().min(10).max(10).required()
             })
+
+            try {
+                await schema.validateAsync(body);
+                resolve();
+            }
+            catch(err) {
+                console.log(`Not a valid Object`);
+                reject(err);
+            }
         })
     }
 }

@@ -2,6 +2,7 @@ var jwt = require('jsonwebtoken');
 const secret = "DHJWKJSBVKDISDBVJEWJSDHJDSHFJLSDHVJEWBGJDSUIEBF13UHUEUFHWE18HUEWHUE83HDODJVJXZ";
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
+const otpGenerator = require('otp-generator')
 
 
 class authHelper {
@@ -50,6 +51,12 @@ class authHelper {
                 resolve(result);
             }); 
         })
+    }
+
+
+    async otpGenerator() {
+        let otp = otpGenerator.generate(4, {digits: true, lowerCaseAlphabets: false, upperCaseAlphabets: false, specialChars: false});
+        return otp;
     }
 }
 
