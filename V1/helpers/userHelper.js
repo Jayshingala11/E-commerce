@@ -24,6 +24,17 @@ class userHelper {
         let productInsert = await databaseHelper.insert(connection, `product_images`, body);
         return productInsert;
     }
+
+    async otpInsert(connection, body) {
+        let otpInsert = await databaseHelper.insert(connection, `user_number`, body);
+        return otpInsert;
+    }
+
+
+    async otpUpdate(connection, body, where) {
+        let otpUpdate = await databaseHelper.update(connection, `user_number`, body, where);
+        return otpUpdate;
+    }
 }
 
 

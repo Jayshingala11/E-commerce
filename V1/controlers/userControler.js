@@ -215,20 +215,78 @@ class UserControler {
 
 
     async otp(req, res) {
+        let connection = await databaseHelper.getConnection();
         let body = req.body;
         try {
             console.log(`[body is] :::`, body);
 
             await userValidator.otp(body);
 
+            // OTP Generate
             let otpGenerate = await authHelper.otpGenerator();
             console.log(`[OTP is] :::`, otpGenerate);
 
+            let Obj = {
+                number: body.number,
+                otp: otpGenerate
+            }
+            console.log(`[Object is] :::`, Obj);
+
+            // Check Number is Exist or Not in DB...
+            let numberFetch = await databaseHelper.select(connection, `user_number as un`, `un.number`, `AND number IN (${body.number})`);
+            
+            // Update this OTP in DB with this number...
+            if(numberFetch.length > 0) {
+                let update = await userHelper.otpUpdate(connection,{otp: otpGenerate}, `number = '${body.number}' `);
+                console.log(`[update] :::`, update);
+            }
+            // Insert new Number with OTP in DB...
+            else {
+                let insert = await userHelper.otpInsert(connection, Obj);   
+                console.log(`[insert] :::`, insert);
+            }
+
+            sendResponse(res, 1, "Otp send successfully", otpGenerate);
             
         }
         catch(err) {
             console.log(`In otp catch`, err);
             sendResponse(res, 0, "Somthing went wrong");
+        }
+        finally {
+            databaseHelper.release(connection);
+        }
+    }
+
+
+    async verifyOTP(req, res) {
+        let connection = await databaseHelper.getConnection();
+        let body = req.body;
+
+        try{
+            console.log(`[Body is] :::`, body);
+
+            await userValidator.verifyOTP(body);
+
+            // Check Number & OTP in DB available or Not...
+            let verify = await databaseHelper.select(connection, `user_number as un`, `un.*`, `AND number = ${body.number} AND otp = ${body.otp}`);
+            console.log(`[verify] :::`, verify);
+
+            // If Number OR OTP not Match to DB Then Throw Err...
+            if(verify.length === 0) throw {message: "Please Enter a valid Number OR OTP..."}; 
+            
+            // Now it's time to generate/issue a new token to this user...
+            let token = await authHelper.generateToken(body.otp, '1h');
+            console.log(`[Token ] :::`, token);
+
+            sendResponse(res, 1, "Login successfully", token);
+        }
+        catch(err) {
+            console.log(`In verifyOTP catch`, err);
+            sendResponse(res, 0, "Somthing went wrong", err);
+        }
+        finally {
+            databaseHelper.release(connection);
         }
     }
 }

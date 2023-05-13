@@ -30,4 +30,6 @@ router.get('/getCart', userControler.getCart);
 
 router.post('/otp', userControler.otp);
 
+router.post('/verifyOTP', userControler.verifyOTP);
+
 module.exports = router;

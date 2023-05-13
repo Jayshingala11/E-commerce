@@ -4,7 +4,7 @@ const pool = mysql.createPool({
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'e-com'
+    database: 'homework'
 });
 
 class DatabaseHelper {
@@ -56,6 +56,23 @@ class DatabaseHelper {
             });
         })
     }
+
+
+    async update(connection, table, params, where) {
+        return new Promise((resolve, reject) => {
+            let qry = `UPDATE ${table} SET ? WHERE  ${where}`
+            console.log(`[qry] :::`, qry);
+            console.log(`[params] ::: `, params);
+            connection.query(qry, [params], function(err, results) {
+                if(err) {
+                    reject(err);
+                }
+                console.log(`[results] :::`, results);
+                resolve(results);
+            })
+        })
+    }
+
 
     async getPagination(connection, table, params, where, joins, body) {
         return new Promise((resolve, reject) => {
