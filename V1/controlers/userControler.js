@@ -289,6 +289,38 @@ class UserControler {
             databaseHelper.release(connection);
         }
     }
+
+
+    async itemFetch(req, res) {
+        let connection = await databaseHelper.getConnection();
+        let body = req.body;
+
+        try {
+
+            console.log(`[Body is ] :::`, body);
+
+            let where = '';
+
+            if(`min_price` in body) {
+                where += ` AND pr.price >= ${body.min_price} `;
+            }
+            if(`max_price` in body) {
+                where += ` AND pr.price <= ${body.max_price} `;
+            }
+
+            let itemFetch = await databaseHelper.select(connection, `products as pr`, `*`, `${where}`);
+            console.log(`[Item Fetch ] :::`, itemFetch);
+
+            sendResponse(res, 1, "Success", itemFetch);
+        }
+        catch(err) {
+            console.log(` In itemFetch catch `, err);
+            sendResponse(res, 0, " Somthing went wrong ", err);
+        }
+        finally {
+            databaseHelper.release(connection);
+        }
+    }
 }
 
 

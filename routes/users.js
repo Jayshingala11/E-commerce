@@ -32,4 +32,6 @@ router.post('/otp', userControler.otp);
 
 router.post('/verifyOTP', userControler.verifyOTP);
 
+router.post('/itemFetch', userControler.itemFetch);
+
 module.exports = router;
