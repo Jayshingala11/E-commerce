@@ -58,6 +58,21 @@ class DatabaseHelper {
     }
 
 
+    async delete(connection, table, where) {
+        return new Promise((resolve, reject) => {
+            let qry = ` DELETE FROM ${table} WHERE 1=1 ${where} `;
+            console.log(`[qry] :::`, qry);
+            connection.query(qry, function(err, results) {
+                if(err) {
+                    reject(err);
+                }
+                console.log(`[results] :::`, results);
+                resolve(results);
+            })
+        })
+    }
+
+
     async update(connection, table, params, where) {
         return new Promise((resolve, reject) => {
             let qry = `UPDATE ${table} SET ? WHERE  ${where}`

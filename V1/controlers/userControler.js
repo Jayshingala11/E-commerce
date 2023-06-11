@@ -57,7 +57,7 @@ class UserControler {
             let isEmailExist = await databaseHelper.select(connection, `users`, ` * `, `AND email="${body.email}"`);
             console.log(`isEmailExist ::: `, isEmailExist);
 
-            if(isEmailExist.length == 0 ) throw {message: "User doesn not exist. Please regsiter first."}
+            if(isEmailExist.length == 0 ) throw {message: "User does not exist. Please regsiter first."}
 
             //Check this user's status as well...
             if(isEmailExist[0].status == 0 ) throw {message: "User is blocked by admin."}
@@ -316,6 +316,25 @@ class UserControler {
         catch(err) {
             console.log(` In itemFetch catch `, err);
             sendResponse(res, 0, " Somthing went wrong ", err);
+        }
+        finally {
+            databaseHelper.release(connection);
+        }
+    }
+
+
+    async itemDelete(req, res) {
+        let connection = await databaseHelper.getConnection();
+        
+        try {
+
+            await databaseHelper.delete(connection, `products`, `AND id = 4`);
+            
+            sendResponse(res, 1, "Success", null);
+        }
+        catch(err) {
+            console.log(` In itemDelete catch `, err);
+            sendResponse(res, 0, "Somthing went wrong", err);
         }
         finally {
             databaseHelper.release(connection);

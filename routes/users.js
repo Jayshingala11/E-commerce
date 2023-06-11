@@ -34,4 +34,6 @@ router.post('/verifyOTP', userControler.verifyOTP);
 
 router.post('/itemFetch', userControler.itemFetch);
 
+router.post('/itemDelete', userControler.itemDelete);
+
 module.exports = router;
