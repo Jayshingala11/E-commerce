@@ -35,6 +35,10 @@ class userHelper {
         let otpUpdate = await databaseHelper.update(connection, `user_number`, body, where);
         return otpUpdate;
     }
+
+    async check_out_time_Update(connection, body, where) {
+        let time_update = await databaseHelper.update(connection, `check_in_time`, body, where);
+    }
 }
 
 

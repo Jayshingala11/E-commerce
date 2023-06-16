@@ -36,4 +36,12 @@ router.post('/itemFetch', userControler.itemFetch);
 
 router.post('/itemDelete', userControler.itemDelete);
 
+router.post('/checkIn', userControler.checkIn);
+
+router.post('/checkOut', userControler.checkOut);
+
+router.get('/getData', userControler.getData);
+
+router.post('/deleteData', userControler.deleteData);
+
 module.exports = router;

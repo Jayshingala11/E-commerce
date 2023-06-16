@@ -340,6 +340,121 @@ class UserControler {
             databaseHelper.release(connection);
         }
     }
+
+
+
+    async checkIn(req, res) {
+        let connection = await dbHelper.getConnection();
+        let body = req.body;
+
+        try{
+
+            console.log(`[Body is ] :::`, body);
+
+            await userValidator.checkIn(body);
+
+            let checkEmpId = await dbHelper.select(connection, `check_in_time`, `*`, `AND employe_id = "${body.employe_id}"`);
+            console.log(`[Employe data] :::`, checkEmpId);
+
+            if(checkEmpId.length != 0) {
+                throw {message: "You are already Check-In"};
+            }else{
+                let insertEmp = await dbHelper.insert(connection, `check_in_time`, body);
+                console.log(`[insertEmp] :::`, insertEmp);
+            }
+
+            sendResponse(res, 1, "Success", body);
+        }
+        catch(err) {
+            console.log(`In checkIn catch`, err);
+            sendResponse(res, 0, err.message || "Somthing went wrong", err);
+        }
+        finally{
+            dbHelper.release(connection);
+        }
+    }
+
+
+    async checkOut(req, res) {
+        let connection = await dbHelper.getConnection();
+        let body = req.body;
+
+        try{
+            console.log(`[Body is ] :::`, body);
+
+            await userValidator.checkOut(body);
+
+            let checkEmp = await dbHelper.select(connection, `check_in_time`, `*`, `AND employe_id = "${body.employe_id}"`);
+
+            if(checkEmp[0].employe_id == body.employe_id && checkEmp[0].check_out_time != "00:00:00") {
+                throw {message: "You are already Check-Out"};
+            }else{
+                let updateEmpOutTime = await userHelper.check_out_time_Update(connection, {check_out_time: body.check_out_time}, `employe_id = "${body.employe_id}"`);
+            }
+
+            sendResponse(res, 1, "Success", body);
+        }
+        catch(err) {
+            console.log(`In checkOut catch`, err);
+            sendResponse(res, 0, err.message || "Somthing went wrong", err);
+        }
+        finally{
+            dbHelper.release(connection);
+        }
+    }
+
+
+    async getData(req, res) {
+        let connection = await databaseHelper.getConnection();
+        let body = req.body;
+
+        try{
+            console.log(`[body] :::`, body);
+
+            await userValidator.getData(body);
+
+            let checkStatus = await databaseHelper.select(connection, `check_in_time`, `*`, `AND employe_id = "${body.employe_id}"`);
+
+            if(checkStatus[0].check_out_time == "00:00:00" && checkStatus[0].check_in_time != 0) {
+                sendResponse(res, 1, {Check_in_status: 2, Check_out_status: 1}, checkStatus);
+            }
+            else if(checkStatus[0].check_out_time != "00:00:00" && checkStatus[0].check_in_time != 0) {
+                sendResponse(res, 1, {Check_in_status: 2, Check_out_status: 2}, checkStatus);
+            }
+
+        }
+        catch(err) {
+            console.log(`In getdata catch`, err);
+            sendResponse(res, 0, err.message || "Somthing went wrong", err);
+        }
+        finally{
+            databaseHelper.release(connection);
+        }
+    }
+
+
+    async deleteData(req, res) {
+        let connection = await databaseHelper.getConnection();
+        let body = req.body;
+
+        try{
+            console.log(`[Body] :::`, body);
+
+            await userValidator.deleteData(body);
+
+            let deleteEmp = await databaseHelper.delete(connection, `check_in_time`, `AND employe_id = "${body.employe_id}"`);
+
+
+            sendResponse(res, 1, "Deleted Successfully", body);
+        }
+        catch(err) {
+            console.log(`In deleteData catch`, err);
+            sendResponse(res, 0, err.message || "Somthing went wrong", err);
+        }
+        finally{
+            databaseHelper.release(connection);
+        }
+    }
 }
 
 

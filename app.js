@@ -11,9 +11,9 @@ var app = express();
 
 // packages for uniqe id
 const { v4: uuidv4 } = require('uuid');
-console.log(uuidv4());
+// console.log(uuidv4());
 const shortid = require('shortid');
-console.log(shortid.generate());
+// console.log(shortid.generate());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

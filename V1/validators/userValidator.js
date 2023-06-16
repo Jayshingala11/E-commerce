@@ -110,6 +110,79 @@ class userValidator {
             }
         })
     }
+
+
+    async checkIn(body) {
+        return new Promise(async(resolve, reject) => {
+            const schema = Joi.object({
+                employe_id: Joi.string().required()
+            })
+
+            try{
+                await schema.validateAsync(body);
+                resolve();
+            }
+            catch(err) {
+                console.log(`Not a valid Object`);
+                reject(err);
+            }
+        })
+    }
+
+
+    async checkOut(body) {
+        return new Promise(async(resolve, reject) => {
+            const schema = Joi.object({
+                employe_id: Joi.string().required(),
+                check_out_time: Joi.string().required()
+            })
+
+            try{
+                await schema.validateAsync(body);
+                resolve();
+            }
+            catch(err) {
+                console.log(`Not a valid Object`);
+                reject(err);
+            }
+        })
+    }
+
+
+    async getData(body) {
+        return new Promise(async(resolve, reject) => {
+            const schema = Joi.object({
+                employe_id: Joi.string().required()
+            })
+
+            try{
+                await schema.validateAsync(body);
+                resolve();
+            }
+            catch(err) {
+                console.log(`Not a valid Object`);
+                reject(err);
+            }
+        })
+    }
+
+
+    async deleteData(body) {
+        return new Promise(async(resolve, reject) => {
+            const schema = Joi.object({
+                employe_id: Joi.string().required()
+            })
+
+            try{
+                await schema.validateAsync(body);
+                resolve();
+            }
+            catch(err) {
+                console.log(`Not a valid Object`);
+                reject(err);
+            }
+        })
+    }
 }
 
 
