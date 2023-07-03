@@ -411,9 +411,10 @@ class UserControler {
         try{
             console.log(`[body] :::`, body);
 
-            await userValidator.getData(body);
+            // await userValidator.getData(body);
+            let employe_id = 1000
 
-            let checkStatus = await databaseHelper.select(connection, `check_in_time`, `*`, `AND employe_id = "${body.employe_id}"`);
+            let checkStatus = await databaseHelper.select(connection, `check_in_time`, `*`, `AND employe_id = "${employe_id}"`);
 
             if(checkStatus[0].check_out_time == "00:00:00" && checkStatus[0].check_in_time != 0) {
                 sendResponse(res, 1, {Check_in_status: 2, Check_out_status: 1}, checkStatus);
